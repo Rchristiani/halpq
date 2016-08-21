@@ -6,7 +6,7 @@ import Home from './home.js';
 import Room from './room.js';
 
 class App extends React.Component {
-	constructor() {
+	constructor(props,context) {
 		super();
 		this.state = {
 			loggedIn: false,
@@ -58,6 +58,14 @@ class App extends React.Component {
 			create: true
 		});
 	}
+	signout(e) {
+		e.preventDefault();
+		firebase.auth().signOut();
+		this.setState({
+			loggedIn: false
+		});
+		this.context.router.push('/')
+	}
 	render() {
 		let loginForm = (
 			<aside>
@@ -90,7 +98,10 @@ class App extends React.Component {
 			<div>
 				<header className="main-header">
 					<div className="wrapper">
-						<h1><Link to="/">Halpq</Link></h1>
+						<nav>
+							<h1><Link to="/">Halpq</Link></h1>
+							<a href="#" onClick={e => this.signout.call(this,e)}>Sign out</a>
+						</nav>
 						{loginForm}
 					</div>
 				</header>
@@ -101,6 +112,11 @@ class App extends React.Component {
 		);
 	}
 };
+
+App.contextTypes = {
+	router: React.PropTypes.object
+};
+
 
 ReactDom.render(
 	<Router history={browserHistory}>

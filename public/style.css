@@ -28,6 +28,12 @@ body {
 	text-decoration: none;
 }
 
+.main-header nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 /*
 	Home
 */

@@ -26162,7 +26162,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_React$Component) {
 	_inherits(App, _React$Component);
 
-	function App() {
+	function App(props, context) {
 		_classCallCheck(this, App);
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this));
@@ -26218,6 +26218,16 @@ var App = function (_React$Component) {
 			this.setState({
 				create: true
 			});
+		}
+	}, {
+		key: 'signout',
+		value: function signout(e) {
+			e.preventDefault();
+			firebase.auth().signOut();
+			this.setState({
+				loggedIn: false
+			});
+			this.context.router.push('/');
 		}
 	}, {
 		key: 'render',
@@ -26293,12 +26303,23 @@ var App = function (_React$Component) {
 						'div',
 						{ className: 'wrapper' },
 						_react2.default.createElement(
-							'h1',
+							'nav',
 							null,
 							_react2.default.createElement(
-								_reactRouter.Link,
-								{ to: '/' },
-								'Halpq'
+								'h1',
+								null,
+								_react2.default.createElement(
+									_reactRouter.Link,
+									{ to: '/' },
+									'Halpq'
+								)
+							),
+							_react2.default.createElement(
+								'a',
+								{ href: '#', onClick: function onClick(e) {
+										return _this3.signout.call(_this3, e);
+									} },
+								'Sign out'
 							)
 						),
 						loginForm
@@ -26317,6 +26338,10 @@ var App = function (_React$Component) {
 }(_react2.default.Component);
 
 ;
+
+App.contextTypes = {
+	router: _react2.default.PropTypes.object
+};
 
 _reactDom2.default.render(_react2.default.createElement(
 	_reactRouter.Router,
