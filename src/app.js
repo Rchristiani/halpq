@@ -17,14 +17,15 @@ class App extends React.Component {
 	componentDidMount() {
 		firebase.auth()
 			.onAuthStateChanged((res) => {
-				this.setState({
-					loggedIn: true
-				});
+				if(res) {
+					this.setState({
+						loggedIn: true
+					});
+				}
 			});
 	}
 	login(e) {
 		e.preventDefault();
-		console.log(this);
 		let user = {
 			email: this.userEmail.value,
 			password: this.userPassword.value
@@ -37,7 +38,7 @@ class App extends React.Component {
 						console.log('create: ', res);
 					})
 					.catch(err => {
-						console.log('error: ', err);
+						alert(err.message);
 					});
 			}
 		}
@@ -48,7 +49,7 @@ class App extends React.Component {
 					console.log(res);
 				})
 				.catch(err => {
-					console.log(err);
+					alert(err.message);
 				});
 		}
 	}
@@ -100,7 +101,11 @@ class App extends React.Component {
 					<div className="wrapper">
 						<nav>
 							<h1><Link to="/">Halpq</Link></h1>
-							<a href="#" onClick={e => this.signout.call(this,e)}>Sign out</a>
+							{(() => {
+								if(this.state.loggedIn) {
+									return (	<a href="#" onClick={e => this.signout.call(this,e)}>Sign out</a>);
+								}
+							})()}
 						</nav>
 						{loginForm}
 					</div>

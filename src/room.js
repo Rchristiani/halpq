@@ -41,7 +41,9 @@ export default class Room extends React.Component {
 	}
 	newQuestion(e) {
 		e.preventDefault();
-
+		if(firebase.auth().currentUser === null) {
+			return alert('Login to ask a question');
+		}
 		const question = {
 			user: firebase.auth().currentUser.email,
 			question: this.question.value,

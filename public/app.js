@@ -26181,16 +26181,17 @@ var App = function (_React$Component) {
 			var _this2 = this;
 
 			firebase.auth().onAuthStateChanged(function (res) {
-				_this2.setState({
-					loggedIn: true
-				});
+				if (res) {
+					_this2.setState({
+						loggedIn: true
+					});
+				}
 			});
 		}
 	}, {
 		key: 'login',
 		value: function login(e) {
 			e.preventDefault();
-			console.log(this);
 			var user = {
 				email: this.userEmail.value,
 				password: this.userPassword.value
@@ -26200,14 +26201,14 @@ var App = function (_React$Component) {
 					firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(function (res) {
 						console.log('create: ', res);
 					}).catch(function (err) {
-						console.log('error: ', err);
+						alert(err.message);
 					});
 				}
 			} else {
 				firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(function (res) {
 					console.log(res);
 				}).catch(function (err) {
-					console.log(err);
+					alert(err.message);
 				});
 			}
 		}
@@ -26314,13 +26315,17 @@ var App = function (_React$Component) {
 									'Halpq'
 								)
 							),
-							_react2.default.createElement(
-								'a',
-								{ href: '#', onClick: function onClick(e) {
-										return _this3.signout.call(_this3, e);
-									} },
-								'Sign out'
-							)
+							function () {
+								if (_this3.state.loggedIn) {
+									return _react2.default.createElement(
+										'a',
+										{ href: '#', onClick: function onClick(e) {
+												return _this3.signout.call(_this3, e);
+											} },
+										'Sign out'
+									);
+								}
+							}()
 						),
 						loginForm
 					)
@@ -26573,7 +26578,9 @@ var Room = function (_React$Component) {
 		key: 'newQuestion',
 		value: function newQuestion(e) {
 			e.preventDefault();
-
+			if (firebase.auth().currentUser === null) {
+				return alert('Login to ask a question');
+			}
 			var question = {
 				user: firebase.auth().currentUser.email,
 				question: this.question.value,
